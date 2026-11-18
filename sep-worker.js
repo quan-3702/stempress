@@ -22,6 +22,7 @@ async function modelBytes() {
     res = await fetch(MODEL_URL);
     if (!res.ok) throw new Error('The AI model could not be downloaded (' + res.status + '). Check the internet connection and try again.');
   }
+  if (fromCache) return new Uint8Array(await res.arrayBuffer());
   const total = Number(res.headers.get('Content-Length')) || MODEL_SIZE;
   const reader = res.body.getReader();
   const parts = []; let got = 0, last = 0;
@@ -34,7 +35,7 @@ async function modelBytes() {
   if (!fromCache && got < 1e8) throw new Error('The AI model download was cut off. Please try again.');
   const buf = new Uint8Array(got); let o = 0;
   for (const p of parts) { buf.set(p, o); o += p.length; }
-  if (!fromCache && cache) { try { await cache.put(MODEL_URL, new Response(buf.slice(0), { headers: { 'Content-Type': 'application/octet-stream', 'Content-Length': String(got) } })); } catch (_) {} }
+  if (!fromCache && cache) { try { await cache.put(MODEL_URL, new Response(buf, { headers: { 'Content-Type': 'application/octet-stream', 'Content-Length': String(got) } })); } catch (_) {} }
   return buf;
 }
 

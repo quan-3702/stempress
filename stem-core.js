@@ -136,7 +136,7 @@ function chords(ch, opts) {
   const sc = frames.map((c, f) => {
     const norm = Math.hypot(...c) || 1, row = new Float64Array(S);
     for (let k = 0; k < TEMPLATES.length; k++) { const t = TEMPLATES[k]; let d = 0; for (let p = 0; p < 12; p++) d += c[p] * t[p]; row[k] = d / norm / 1.596; }
-    row[S - 1] = energy[f] < maxE * 1e-3 ? 1 : 0.45;
+    row[S - 1] = energy[f] < maxE * 1e-3 ? 1 : 0.3; // "no chord" only where it is (almost) silent
     return row;
   });
   // Viterbi: changing chord costs something, so short wobbles are ignored
