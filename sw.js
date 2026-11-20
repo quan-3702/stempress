@@ -1,6 +1,6 @@
-const CACHE = 'stempress-v3';
+const CACHE = 'stempress-v4';
 const RUNTIME = 'stempress-lib-v1';
-const ASSETS = ['./', 'index.html', 'help.html', 'privacy.html', 'style.css', 'stem-core.js', 'app.js', 'sep-worker.js', 'mp3-worker.js', 'lame.min.js', 'dsp-worker.js', 'manifest.json', 'icon-192.png', 'icon-512.png', 'icon-512-maskable.png'];
+const ASSETS = ['./', 'index.html', 'help.html', 'privacy.html', 'style.css', 'stem-core.js', 'app.js', 'rate.js', 'sep-worker.js', 'mp3-worker.js', 'lame.min.js', 'dsp-worker.js', 'manifest.json', 'icon-192.png', 'icon-512.png', 'icon-512-maskable.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS.map((u) => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting())); });
 // the AI model ("stempress-model") is kept: it is large and only downloaded once
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE && k !== RUNTIME && k !== 'stempress-model' && k.startsWith('stempress')).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
